@@ -1,12 +1,12 @@
 package com.SavingsCalculator;
 
-public class Main {
+public class SavingsCalculator {
 
     public static void main(String[] args) {
 	// write your code here
         System.out.println("hello WRLD");
         Savings(480);
-
+        new GUI();
     }
 
     //static int Years = 40;
@@ -14,7 +14,6 @@ public class Main {
     static int Salary = 70000;
     static int monthlySaving_TFSA = 500;
     static int monthlySaving_RRSP = 500;
-    //0.5 dollars up to 8%
     static double RRSP_ROOM = Math.min(27230, Salary*0.18);
     static double RRSP_Company_MAX_YEARLY = Salary*0.08;
     static double RRSP_Company_MAX_MONTLHY = RRSP_Company_MAX_YEARLY/12;
@@ -23,6 +22,7 @@ public class Main {
 
     static double totalSavings_TFSA = 0;
     static double totalSavings_RRSP = 0;
+    static double totalSavings = 0;
     static double yearlyInterest = 0.07;
     static double monthlyInterest = yearlyInterest/12;//change this for a proper calculation
 
@@ -30,8 +30,12 @@ public class Main {
         System.out.println("dpsp: "+monthlySaving_RRSP_DPSP);
         if(Months>0)
         {
-            totalSavings_TFSA = SavingsTFSA() + SavingsRRSP();
+            totalSavings_TFSA = SavingsTFSA();
+            totalSavings_RRSP = SavingsRRSP();
+            totalSavings = totalSavings_TFSA + totalSavings_RRSP;
             System.out.println("total Savings TFSA: "+ totalSavings_TFSA);
+            System.out.println("total Savings RRSP: "+ totalSavings_RRSP);
+            System.out.println("total Savings     : "+ totalSavings);
             Savings(--Months);
         }
     }
