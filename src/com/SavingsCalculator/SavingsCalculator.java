@@ -5,7 +5,6 @@ public class SavingsCalculator {
     public static void main(String[] args) {
 	// write your code here
         System.out.println("hello WRLD");
-        Savings(480);
         new GUI();
     }
 
@@ -25,8 +24,9 @@ public class SavingsCalculator {
     static double totalSavings = 0;
     static double yearlyInterest = 0.07;
     static double monthlyInterest = yearlyInterest/12;//change this for a proper calculation
+    static int Months = 480;
 
-    static void Savings(int Months) {
+    static void Savings() {
         System.out.println("dpsp: "+monthlySaving_RRSP_DPSP);
         if(Months>0)
         {
@@ -36,7 +36,8 @@ public class SavingsCalculator {
             System.out.println("total Savings TFSA: "+ totalSavings_TFSA);
             System.out.println("total Savings RRSP: "+ totalSavings_RRSP);
             System.out.println("total Savings     : "+ totalSavings);
-            Savings(--Months);
+            --Months;
+            Savings();
         }
     }
 
