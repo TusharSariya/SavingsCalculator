@@ -22,7 +22,6 @@ public class GUI extends Application implements ActionListener {
         // write your code here
         System.out.println("hello WRLD");
         new GUI();
-        launch(args);
     }
 
     int count = 0;
@@ -67,16 +66,17 @@ public class GUI extends Application implements ActionListener {
         monthlySaving_RRSP = Integer.parseInt(TextFieldRRSP.getText());
         Savings();
         labelSavings.setText(String.valueOf(totalSavings));
+        launch(null);
     }
 
     public void start(Stage stage) {
 
         //Defining the x axis
-        NumberAxis xAxis = new NumberAxis(1960, 2020, 10);
+        NumberAxis xAxis = new NumberAxis(0, 480, 1);
         xAxis.setLabel("Years");
 
         //Defining the y axis
-        NumberAxis yAxis = new NumberAxis   (0, 350, 50);
+        NumberAxis yAxis = new NumberAxis   (0, 4000000, 100000);
         yAxis.setLabel("No.of schools");
 
         //Creating the line chart
@@ -86,12 +86,13 @@ public class GUI extends Application implements ActionListener {
         XYChart.Series series = new XYChart.Series();
         series.setName("No of schools in an year");
 
-        series.getData().add(new XYChart.Data(1970, 15));
-        series.getData().add(new XYChart.Data(1980, 30));
-        series.getData().add(new XYChart.Data(1990, 60));
-        series.getData().add(new XYChart.Data(2000, 120));
-        series.getData().add(new XYChart.Data(2013, 240));
-        series.getData().add(new XYChart.Data(2014, 300));
+        //series.getData().add(new XYChart.Data(1970, 15));
+        for(int i = 0; i < 480; i++)
+        {
+            series.getData().add(new XYChart.Data(i, totalSavings_TFSA[i]));
+        }
+
+
 
         //Setting the data to Line chart
         linechart.getData().add(series);
