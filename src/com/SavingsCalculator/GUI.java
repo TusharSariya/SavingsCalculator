@@ -83,19 +83,27 @@ public class GUI extends Application implements ActionListener {
         LineChart linechart = new LineChart(xAxis, yAxis);
 
         //Prepare XYChart.Series objects by setting data
-        XYChart.Series series = new XYChart.Series();
-        series.setName("No of schools in an year");
+        XYChart.Series seriesTFSA = new XYChart.Series();
+        XYChart.Series seriesRRSP = new XYChart.Series();
+        XYChart.Series seriesTotal = new XYChart.Series();
+        seriesTFSA.setName("TFSA");
+        seriesRRSP.setName("RRSP");
+        seriesTotal.setName("Total");
 
         //series.getData().add(new XYChart.Data(1970, 15));
         for(int i = 0; i < 480; i++)
         {
-            series.getData().add(new XYChart.Data(i, totalSavings_TFSA[i]));
+            seriesTFSA.getData().add(new XYChart.Data(i, totalSavings_TFSA[i]));
+            seriesRRSP.getData().add(new XYChart.Data(i, totalSavings_RRSP[i]));
+            seriesTotal.getData().add(new XYChart.Data(i, totalSavings_TFSA[i] + totalSavings_RRSP[i]));
         }
 
 
 
         //Setting the data to Line chart
-        linechart.getData().add(series);
+        linechart.getData().add(seriesTFSA);
+        linechart.getData().add(seriesRRSP);
+        linechart.getData().add(seriesTotal);
 
         //Creating a Group object
         Group root = new Group(linechart);
