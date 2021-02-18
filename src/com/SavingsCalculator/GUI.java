@@ -25,32 +25,47 @@ public class GUI extends Application implements ActionListener {
     }
 
     int count = 0;
-    JLabel labelTFSA,labelRRSP,labelSavings;
-    JTextField TextFieldTFSA,TextFieldRRSP;
+    JLabel label_TFSA,label_RRSP,label_Savings, label_currentAge, label_retirementAge, label_InitialDeposit;
+    JTextField TextField_TFSA,TextField_RRSP, TextField_currentAge, TextField_retirementAge, TextField_initialDeposit;
 
     public GUI() {
         JFrame frame = new JFrame();
 
-        TextFieldTFSA = new JTextField(20);
-        TextFieldTFSA.setText("500");
-        TextFieldRRSP = new JTextField(20);
-        TextFieldRRSP.setText("500");
+        TextField_TFSA = new JTextField(20);
+        TextField_TFSA.setText("500");
+        TextField_RRSP = new JTextField(20);
+        TextField_RRSP.setText("500");
+        TextField_currentAge = new JTextField(20);
+        TextField_currentAge.setText("18");
+        TextField_retirementAge = new JTextField(20);
+        TextField_retirementAge.setText("65");
+        TextField_initialDeposit = new JTextField(20);
+        TextField_initialDeposit.setText("10000");
         JButton buttonCal = new JButton("calculate savings");
 
         buttonCal.addActionListener(this);
-        labelTFSA = new JLabel("TFSA Monthly Contribution: ");
-        labelRRSP = new JLabel("RRSP Monthly Contribution: ");
-        labelSavings = new JLabel("Savings");
+        label_TFSA = new JLabel("TFSA Monthly Contribution: ");
+        label_RRSP = new JLabel("RRSP Monthly Contribution: ");
+        label_currentAge = new JLabel("current age");
+        label_retirementAge = new JLabel( "retirement age");
+        label_Savings = new JLabel("Savings");
+        label_InitialDeposit = new JLabel("Initial Deposit");
         JPanel panel = new JPanel();
 
         panel.setBorder(BorderFactory.createEmptyBorder(30,30,10,30));
         panel.setLayout(new GridLayout(0,1));
-        panel.add(labelTFSA);
-        panel.add(TextFieldTFSA);
-        panel.add(labelRRSP);
-        panel.add(TextFieldRRSP);
+        panel.add(label_TFSA);
+        panel.add(TextField_TFSA);
+        panel.add(label_RRSP);
+        panel.add(TextField_RRSP);
+        panel.add(label_InitialDeposit);
+        panel.add(TextField_initialDeposit);
+        panel.add(label_currentAge);
+        panel.add(TextField_currentAge);
+        panel.add(label_retirementAge);
+        panel.add(TextField_retirementAge);
         panel.add(buttonCal);
-        panel.add(labelSavings);
+        panel.add(label_Savings);
 
         frame.add(panel,BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,17 +77,19 @@ public class GUI extends Application implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         count++;
-        monthlySaving_TFSA = Integer.parseInt(TextFieldTFSA.getText());
-        monthlySaving_RRSP = Integer.parseInt(TextFieldRRSP.getText());
-        Savings();
-        labelSavings.setText(String.valueOf(totalSavings));
+        monthlySaving_TFSA = Integer.parseInt(TextField_TFSA.getText());
+        monthlySaving_RRSP = Integer.parseInt(TextField_RRSP.getText());
+        currentAgeI = Integer.parseInt(TextField_currentAge.getText())*12;
+        retirementAgeI = Integer.parseInt(TextField_retirementAge.getText())*12;
+        Savings(currentAgeI,retirementAgeI);
+        label_Savings.setText(String.valueOf(totalSavings));
         launch(null);
     }
 
     public void start(Stage stage) {
 
         //Defining the x axis
-        NumberAxis xAxis = new NumberAxis(0, 480, 1);
+        NumberAxis xAxis = new NumberAxis(0, 840, 1);
         xAxis.setLabel("Years");
 
         //Defining the y axis
@@ -91,7 +108,7 @@ public class GUI extends Application implements ActionListener {
         seriesTotal.setName("Total");
 
         //series.getData().add(new XYChart.Data(1970, 15));
-        for(int i = 0; i < 480; i++)
+        for(int i = 0; i < 840; i++)
         {
             seriesTFSA.getData().add(new XYChart.Data(i, totalSavings_TFSA[i]));
             seriesRRSP.getData().add(new XYChart.Data(i, totalSavings_RRSP[i]));
@@ -124,6 +141,8 @@ public class GUI extends Application implements ActionListener {
     static int Salary = 70000;
     static int monthlySaving_TFSA = 500;
     static int monthlySaving_RRSP = 500;
+    static int currentAgeI = 500;
+    static int retirementAgeI = 500;
     static double RRSP_ROOM = Math.min(27230, Salary*0.18);
     static double RRSP_Company_MAX_YEARLY = Salary*0.08;
     static double RRSP_Company_MAX_MONTLHY = RRSP_Company_MAX_YEARLY/12;
@@ -137,12 +156,13 @@ public class GUI extends Application implements ActionListener {
     static double totalSavings = 0;
     static double yearlyInterest = 0.07;
     static double monthlyInterest = yearlyInterest/12;//change this for a proper calculation
-    static int Months = 480;
+    static int Months = 840;
     static int i = 0;
 
-    static void Savings() {
+    static void Savings(int currentAgeI,int retirementAgeI) {
         System.out.println("dpsp: "+monthlySaving_RRSP_DPSP);
-        if(i<Months)
+        i = currentAgeI;
+        if(i<retirementAgeI)
         {
             totalSavings_TFSA[i] = SavingsTFSA();
             totalSavings_RRSP[i] = SavingsRRSP();
@@ -151,7 +171,7 @@ public class GUI extends Application implements ActionListener {
             System.out.println("total Savings RRSP: "+ totalSavings_RRSP[i]);
             System.out.println("total Savings     : "+ totalSavings);
             i++;
-            Savings();
+            Savings(currentAgeI+1, retirementAgeI);
         }
     }
 
