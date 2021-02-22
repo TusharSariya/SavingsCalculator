@@ -1,7 +1,6 @@
 package com.SavingsCalculator;
 
 import javafx.scene.Group;
-import jdk.jshell.spi.ExecutionControl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,20 +16,39 @@ import javafx.stage.Stage;
 
 public class GUI extends Application implements ActionListener {
 
-
+    private static final boolean DEBUG = false;
     public static void main(String[] args) {
-        // write your code here
-        System.out.println("hello WRLD");
         new GUI();
     }
 
-    int count = 0;
-    JLabel label_TFSA,label_RRSP,label_Savings, label_currentAge, label_retirementAge, label_InitialDeposit;
-    JTextField TextField_TFSA,TextField_RRSP, TextField_currentAge, TextField_retirementAge, TextField_initialDeposit;
+    JLabel  label_TFSA,
+            label_RRSP,
+            label_Savings,
+            label_currentAge,
+            label_retirementAge,
+            label_InitialDeposit;
+
+    JTextField TextField_TFSA,
+               TextField_RRSP,
+               TextField_currentAge,
+               TextField_retirementAge,
+               TextField_initialDeposit;
+
+    JPanel panel = new JPanel();
+    JButton buttonCal = new JButton("calculate savings");
+    JFrame frame = new JFrame();
 
     public GUI() {
-        JFrame frame = new JFrame();
+        setTextFields();
+        buttonCal.addActionListener(this);
+        setLabels();
+        configurePanel();
+        addToPanel();
+        configureFrame();
+    }
 
+    public void setTextFields()
+    {
         TextField_TFSA = new JTextField(20);
         TextField_TFSA.setText("500");
         TextField_RRSP = new JTextField(20);
@@ -41,19 +59,20 @@ public class GUI extends Application implements ActionListener {
         TextField_retirementAge.setText("65");
         TextField_initialDeposit = new JTextField(20);
         TextField_initialDeposit.setText("10000");
-        JButton buttonCal = new JButton("calculate savings");
+    }
 
-        buttonCal.addActionListener(this);
+    public void setLabels()
+    {
         label_TFSA = new JLabel("TFSA Monthly Contribution: ");
         label_RRSP = new JLabel("RRSP Monthly Contribution: ");
         label_currentAge = new JLabel("current age");
         label_retirementAge = new JLabel( "retirement age");
         label_Savings = new JLabel("Savings");
         label_InitialDeposit = new JLabel("Initial Deposit");
-        JPanel panel = new JPanel();
+    }
 
-        panel.setBorder(BorderFactory.createEmptyBorder(30,30,10,30));
-        panel.setLayout(new GridLayout(0,1));
+    public void addToPanel()
+    {
         panel.add(label_TFSA);
         panel.add(TextField_TFSA);
         panel.add(label_RRSP);
@@ -66,7 +85,16 @@ public class GUI extends Application implements ActionListener {
         panel.add(TextField_retirementAge);
         panel.add(buttonCal);
         panel.add(label_Savings);
+    }
 
+    public void configurePanel()
+    {
+        panel.setBorder(BorderFactory.createEmptyBorder(30,30,10,30));
+        panel.setLayout(new GridLayout(0,1));
+    }
+
+    public void configureFrame()
+    {
         frame.add(panel,BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Our GUI");
@@ -76,14 +104,18 @@ public class GUI extends Application implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        count++;
+        parseInput();
+        Savings(currentAgeI,retirementAgeI);
+        label_Savings.setText(String.valueOf(totalSavings));
+        launch(null);
+    }
+
+    public void parseInput()
+    {
         monthlySaving_TFSA = Integer.parseInt(TextField_TFSA.getText());
         monthlySaving_RRSP = Integer.parseInt(TextField_RRSP.getText());
         currentAgeI = Integer.parseInt(TextField_currentAge.getText())*12;
         retirementAgeI = Integer.parseInt(TextField_retirementAge.getText())*12;
-        Savings(currentAgeI,retirementAgeI);
-        label_Savings.setText(String.valueOf(totalSavings));
-        launch(null);
     }
 
     public void start(Stage stage) {
@@ -167,9 +199,11 @@ public class GUI extends Application implements ActionListener {
             totalSavings_TFSA[i] = SavingsTFSA();
             totalSavings_RRSP[i] = SavingsRRSP();
             totalSavings = totalSavings_TFSA[i] + totalSavings_RRSP[i];
-            System.out.println("total Savings TFSA: "+ totalSavings_TFSA[i]);
-            System.out.println("total Savings RRSP: "+ totalSavings_RRSP[i]);
-            System.out.println("total Savings     : "+ totalSavings);
+            if(DEBUG) {
+                System.out.println("total Savings TFSA: " + totalSavings_TFSA[i]);
+                System.out.println("total Savings RRSP: " + totalSavings_RRSP[i]);
+                System.out.println("total Savings     : " + totalSavings);
+            }
             i++;
             Savings(currentAgeI+1, retirementAgeI);
         }
